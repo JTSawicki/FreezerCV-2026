@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="LabControlsWPF.IconedButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LabControlsWPF"
+             mc:Ignorable="d" 
+             x:Name="root"
+             d:DesignHeight="50" d:DesignWidth="200"
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Button Command="{Binding Command, ElementName=root}"
+            CommandParameter="{Binding CommandParameter, ElementName=root}"
+            Style="{StaticResource MaterialDesignRaisedButton}">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <materialDesign:PackIcon Grid.Column="0"
+                                     Kind="{Binding Kind, ElementName=root}"
+                                     HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1"
+                       Text="{Binding Text, ElementName=root}" Margin="5, 0, 0, 0"
+                       VerticalAlignment="Center" TextAlignment="Center"/>
+        </Grid>
+    </Button>
+</UserControl>

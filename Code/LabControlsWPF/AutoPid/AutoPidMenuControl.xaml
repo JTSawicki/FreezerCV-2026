@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="LabControlsWPF.AutoPid.AutoPidMenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LabControlsWPF.AutoPid"
+             mc:Ignorable="d" 
+             
+             x:Name="root"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DesignHeight="450" d:DesignWidth="650"
+             FontFamily="{materialDesign:MaterialDesignFont}"
+             FontSize="14">
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Margin="10" >
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <!-- Panel ustawień -->
+                <DockPanel Grid.Column="0" Grid.Row="0">
+                    <ToggleButton DockPanel.Dock="Right"
+                                  Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
+                                  IsChecked="{Binding IsAutoPid, ElementName=root}"
+                                  Margin="2"/>
+                    <TextBlock Text="Auto Pid"
+                               Margin="5, 5" VerticalAlignment="Center"
+                               TextAlignment="Center" FontWeight="Bold"/>
+                </DockPanel>
+                <!-- &#10; - kod nowej lini '\n' -->
+                <TextBlock Grid.Column="1" Grid.Row="0"
+                           Text="Ilość punktów&#10;sterowania"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Grid.Column="2" Grid.Row="0"
+                          ItemsSource="{Binding AutoPidPointCountList, ElementName=root}"
+                          SelectedItem="{Binding SelectedAutoPidPointCount, ElementName=root}"
+                          Margin="5, 0"/>
+                <Button Grid.Column="3" Grid.Row="0"
+                        Content="Reset" Click="ResetButtonClick"
+                        Margin="5, 5"/>
+                <!-- Panel tytułów -->
+                <TextBlock Grid.Column="0" Grid.Row="1"
+                           Text="Dolna granica&#10;temperatury&#10;double[°C]"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Grid.Column="1" Grid.Row="1"
+                           Text="Parameter P&#10;ushort(0, 9999)"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Grid.Column="2" Grid.Row="1"
+                           Text="Parameter I&#10;ushort(0, 9999)"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Grid.Column="3" Grid.Row="1"
+                           Text="Parameter D&#10;ushort(0, 9999)"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <!-- Panel wartości domyślnej -->
+                <TextBlock Grid.Column="0" Grid.Row="2"
+                           Text="Domyślna&#10;(poniżej najniższej)"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBox Grid.Column="1" Grid.Row="2"
+                         Text="{Binding DefaultParameterPValue, ElementName=root}"
+                         VerticalAlignment="Center" Margin="5, 5"/>
+                <TextBox Grid.Column="2" Grid.Row="2"
+                         Text="{Binding DefaultParameterIValue, ElementName=root}"
+                         VerticalAlignment="Center" Margin="5, 5"/>
+                <TextBox Grid.Column="3" Grid.Row="2"
+                         Text="{Binding DefaultParameterDValue, ElementName=root}"
+                         VerticalAlignment="Center" Margin="5, 5"/>
+            </Grid>
+        </Border>
+        <Border BorderBrush="Gainsboro" BorderThickness="1" Margin="2" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="ParameterStackPanel" Orientation="Vertical"/>
+            </ScrollViewer>
+        </Border>
+    </DockPanel>
+</UserControl>

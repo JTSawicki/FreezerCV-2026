@@ -1,0 +1,47 @@
+# ================================
+# Visual Studio / .NET
+# ================================
+## Build results
+Code/**/bin/
+Code/**/obj/
+Code/**/out/
+## User-specific files
+Code/**/*.user
+Code/**/*.rsuser
+Code/**/*.suo
+Code/**/*.userosscache
+Code/**/*.sln.docstates
+## Visual Studio cache/options
+Code/.vs/
+Code/**/.vs/
+## Debug / Release folders
+Code/**/Debug/
+Code/**/Release/
+Code/**/x64/
+Code/**/x86/
+Code/**/ARM/
+Code/**/ARM64/
+## Rider / VS Code
+Code/.idea/
+Code/.vscode/
+## NuGet
+Code/**/packages/
+Code/**/packages.lock.json
+Code/**/nuget.config
+Code/**/*.nupkg
+Code/**/*.snupkg
+## Logs
+Code/**/*.log
+## Test results
+Code/**/TestResults/
+## BenchmarkDotNet
+Code/**/BenchmarkDotNet.Artifacts/
+## Publish output
+Code/**/publish/
+## OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+## Crash dumps
+*.dump

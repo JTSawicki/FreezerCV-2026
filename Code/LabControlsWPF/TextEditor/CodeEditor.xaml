@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="LabControlsWPF.TextEditor.CodeEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LabControlsWPF.TextEditor"
+             mc:Ignorable="d"
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DesignHeight="450" d:DesignWidth="650"
+             FontFamily="{materialDesign:MaterialDesignFont}"
+             FontSize="14">
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar Style="{StaticResource MaterialDesignToolBar}"
+                     ClipToBounds="False">
+                <Button ToolTip="Wytnij" Command="Cut"
+                        Content="{materialDesign:PackIcon Kind=ContentCut}"/>
+                <Button ToolTip="Kopiuj" Command="Copy"
+                        Content="{materialDesign:PackIcon Kind=ContentCopy}"/>
+                <Button ToolTip="Wklej" Command="Paste"
+                        Content="{materialDesign:PackIcon Kind=ContentPaste}"/>
+                <Separator/>
+                <ToggleButton Content="{materialDesign:PackIcon Kind=FormatPilcrow, Size=21}" 
+                              Style="{StaticResource MaterialDesignFlatToggleButton}" 
+                              ToolTip="Pokazuj białe znaki"
+                              IsChecked="{Binding BlankCharactersVisibility, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                              Click="ShowBlankCharactersToggleButtonClick"/>
+                <ToggleButton Content="{materialDesign:PackIcon Kind=Wrap, Size=21}" 
+                              Style="{StaticResource MaterialDesignFlatToggleButton}" 
+                              ToolTip="Zawijanie tekstu"
+                              IsChecked="{Binding TextWraping, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                              Click="TextWrapToggleButtonClick"/>
+                <ToggleButton Content="{materialDesign:PackIcon Kind=OrderNumericAscending, Size=21}" 
+                              Style="{StaticResource MaterialDesignFlatToggleButton}" 
+                              ToolTip="Numerowanie wierszy"
+                              IsChecked="{Binding LineNumbering, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                              Click="ShowLineNumberingToggleButtonClick"/>
+                <ToggleButton Content="{materialDesign:PackIcon Kind=MessageFlashOutline, Size=21}" 
+                              Style="{StaticResource MaterialDesignFlatToggleButton}" 
+                              ToolTip="Podpowiedzi kodu"
+                              IsChecked="{Binding ShowCodingHints, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                <Separator/>
+                <Label Content="Czcionka:"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ComboBox VerticalAlignment="Center" Margin="10 0"
+                          ItemsSource="{Binding FontSizes, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          SelectedItem="{Binding SelectedFontSize, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          SelectionChanged="FontSizeComboboxSelectionChanged"/>
+                <ComboBox VerticalAlignment="Center" Margin="10 0"
+                          ItemsSource="{Binding FontTypes, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          SelectedItem="{Binding SelectedFontType, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          SelectionChanged="FontTypeComboboxSelectionChanged"/>
+                <Separator/>
+            </ToolBar>
+        </ToolBarTray>
+        <Grid>
+            <!-- Grid wstawiony w celu ustawienia pola tekstowego i ProgressBar razem -->
+            <Border BorderBrush="Gainsboro" BorderThickness="1" Margin="2">
+                <!-- Ze względu na dużą ilość parametrów ustawienia edytora tekstu są w konstruktorze okna -->
+                <avalonEdit:TextEditor xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                       x:Name="textEditor"/>
+            </Border>
+            <ProgressBar x:Name="codeExecutionProgressBar"
+                         Value="35" IsIndeterminate="True" Visibility="Hidden"
+                         HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                         Width="30" Height="30"
+                         Margin="30" Style="{StaticResource MaterialDesignCircularProgressBar}"/>
+        </Grid>
+    </DockPanel>
+</UserControl>

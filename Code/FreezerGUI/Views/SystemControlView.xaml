@@ -1,0 +1,306 @@
+﻿<UserControl x:Class="FreezerGUI.Views.SystemControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FreezerGUI.Views"
+             mc:Ignorable="d" 
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lab="clr-namespace:LabControlsWPF;assembly=LabControlsWPF"
+             xmlns:lab2d="clr-namespace:LabControlsWPF.Plot2D;assembly=LabControlsWPF"
+             xmlns:labEditor="clr-namespace:LabControlsWPF.TextEditor;assembly=LabControlsWPF"
+             xmlns:labpid="clr-namespace:LabControlsWPF.AutoPid;assembly=LabControlsWPF"
+             xmlns:conv="clr-namespace:FreezerGUI.DataConverters"
+             d:DesignHeight="450" d:DesignWidth="800"
+             FontSize="14">
+    <UserControl.Resources>
+        <conv:SoftBooleanVisibilityConverter x:Key="SoftBooleanVisibilityConverter"/>
+    </UserControl.Resources>
+    <DockPanel>
+        <!-- Boczny panel przycisków akcji -->
+        <Border DockPanel.Dock="Right" BorderBrush="Gainsboro" BorderThickness="1" Margin="1" >
+            <StackPanel IsEnabled="{Binding IsEditInterfaceEnabled}">
+                <lab:IconedButton Margin="3"
+                                  Text="Wczytaj kod"
+                                  Kind="FolderOpenOutline"
+                                  Command="{Binding LoadCodeCommand}"/>
+                <lab:IconedButton Margin="3"
+                                  Text="Zapisz kod"
+                                  Kind="ContentSaveOutline"
+                                  Command="{Binding SaveCodeCommand}"/>
+                <lab:IconedButton Margin="3"
+                                  Text="Wczytaj pid"
+                                  Kind="FolderOpenOutline"
+                                  Command="{Binding LoadPidCommand}"/>
+                <lab:IconedButton Margin="3"
+                                  Text="Zapisz pid"
+                                  Kind="ContentSaveOutline"
+                                  Command="{Binding SavePidCommand}"/>
+                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0, 10" HorizontalAlignment="Stretch"/>
+                <lab:IconedButton Margin="3"
+                                  Text="Sprawdź kod"
+                                  Kind="CheckboxMarkedCircleOutline"
+                                  Command="{Binding CheckCodeCommand}"/>
+                <lab:IconedButton Margin="3"
+                                  Text="Uruchom kod"
+                                  Kind="ClockStart"
+                                  Command="{Binding RunCodeCommand}"/>
+                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0, 10" HorizontalAlignment="Stretch"/>
+                <!-- &#10; - kod nowej lini '\n' -->
+                <lab:IconedButton Margin="3"
+                                  Text="Wczytaj pomiary"
+                                  Kind="DatabaseArrowDownOutline"
+                                  Command="{Binding LoadMeasurementDataFromFileCommand}"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Panel wyświetlania błędu -->
+        <Border  DockPanel.Dock="Bottom" Visibility="{Binding ErrorTextVisibility}"
+                 BorderBrush="Gainsboro" BorderThickness="1" Margin="2" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid>
+                    <TextBlock Text="{Binding ErrorText}"
+                               Foreground="{Binding ErrorTextBrush}"
+                               Margin="5, 5"
+                               HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                               TextAlignment="Left" TextWrapping="Wrap"
+                               FontFamily="Consolas" FontWeight="Medium"/>
+                    <Button Command="{Binding HideErrorInfoBlockCommand}"
+                            Content="{materialDesign:PackIcon Kind=CloseThick}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Margin="5, 5" Cursor="Hand"/>
+                </Grid>
+            </ScrollViewer>
+        </Border>
+        
+        <!-- Główny panel okna -->
+        <TabControl TabStripPlacement="Left">
+            <!-- Edytor skryptu -->
+            <TabItem Header="{materialDesign:PackIcon Kind=CodeBraces}"
+                     ToolTip="Edytor skryptu">
+                <labEditor:CodeEditor x:Name="codeEditorControl"
+                                      CurrentlyExecutedLineOfCode="{Binding CurrentlyExecutedLine}"
+                                      ProgramText="{Binding ProgramCode, Mode=TwoWay}"
+                                      HintPool="{Binding EditorHintPool}"
+                                      HighlightingPatternPath="Resources/HighlightingPattern.xshd"/>
+            </TabItem>
+
+            <!-- Menu wyboru parametrów połączenia -->
+            <TabItem Header="{materialDesign:PackIcon Kind=CheckboxMarkedOutline}"
+                     ToolTip="Parametry pomiaru">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalAlignment="Top">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Border  Grid.Column="2" Grid.Row="0" Grid.RowSpan="8"
+                                 BorderBrush="DarkGray" BorderThickness="1"
+                                 Margin="5, 10"/>
+                        <!-- &#10; - kod nowej lini '\n' -->
+                        
+                        <!-- Pierwsza kolumna -->
+                        <TextBlock Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                                   Text="Początkowe&#10;napięcie [V]"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <TextBox Grid.Column="1" Grid.Row="0"
+                                 Text="{Binding SelectedVoltageStart}"
+                                 materialDesign:HintAssist.HelperText="Liczba całkowita"
+                                 VerticalAlignment="Center" Margin="5 10 5 5"/>
+                        <ComboBox Grid.Column="1" Grid.Row="1"
+                                  ItemsSource="{Binding UnitList}"
+                                  SelectedItem="{Binding SelectedVoltageStartUnit}"
+                                  materialDesign:HintAssist.HelperText="Jednostka napięcia"
+                                  Margin="5 10 5 5"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Grid.RowSpan="2"
+                                   Text="Końcowe&#10;napięcie [V]"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <TextBox Grid.Column="1" Grid.Row="2"
+                                 Text="{Binding SelectedVoltageStop}"
+                                 materialDesign:HintAssist.HelperText="Liczba całkowita"
+                                 VerticalAlignment="Center" Margin="5 10 5 5"/>
+                        <ComboBox Grid.Column="1" Grid.Row="3"
+                                  ItemsSource="{Binding UnitList}"
+                                  SelectedItem="{Binding SelectedVoltageStopUnit}"
+                                  materialDesign:HintAssist.HelperText="Jednostka napięcia"
+                                  Margin="5 10 5 5"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="4" Grid.RowSpan="2"
+                                   Text="{Binding VoltageSegmentInfo}"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <TextBox Grid.Column="1" Grid.Row="4"
+                                 Text="{Binding SelectedVoltageSegment}"
+                                 materialDesign:HintAssist.HelperText="Liczba całkowita"
+                                 VerticalAlignment="Center" Margin="5 10 5 5"/>
+                        <ComboBox Grid.Column="1" Grid.Row="5"
+                                  ItemsSource="{Binding UnitList}"
+                                  SelectedItem="{Binding SelectedVoltageSegmentUnit}"
+                                  materialDesign:HintAssist.HelperText="Jednostka segmentu napięcia"
+                                  Visibility="{Binding SelectedVoltageSegmentUnitVisibility, Converter={StaticResource SoftBooleanVisibilityConverter}}"
+                                  Margin="5 10 5 5"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="6" Grid.RowSpan="2"
+                                   Text="Limit&#10;prądu [A]"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <TextBox Grid.Column="1" Grid.Row="6"
+                                 Text="{Binding SelectedCurrentProtection}"
+                                 materialDesign:HintAssist.HelperText="Liczba całkowita"
+                                 VerticalAlignment="Center" Margin="5 10 5 5"/>
+                        <ComboBox Grid.Column="1" Grid.Row="7"
+                                  ItemsSource="{Binding UnitList}"
+                                  SelectedItem="{Binding SelectedCurrentProtectionUnit}"
+                                  materialDesign:HintAssist.HelperText="Jednostka prądu"
+                                  Margin="5 10 5 5"/>
+
+                        <!-- Druga kolumna -->
+                        <TextBlock Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
+                                   Text="Segmentacja&#10;napięcia"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <Border  Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                                 BorderBrush="Gainsboro" BorderThickness="1"
+                                 VerticalAlignment="Center" Margin="2" >
+                            <ListBox ItemsSource="{Binding VoltageSegmentationList}"
+                                     SelectedItem="{Binding SelectedVoltageSegmentation}"/>
+                        </Border>
+
+                        <TextBlock Grid.Column="3" Grid.Row="2" Grid.RowSpan="2"
+                                   Text="Typ połączenia"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <Border  Grid.Column="4" Grid.Row="2" Grid.RowSpan="2"
+                                 BorderBrush="Gainsboro" BorderThickness="1"
+                                 VerticalAlignment="Center" Margin="2" >
+                            <ListBox ItemsSource="{Binding ConnectionTypeList}"
+                                     SelectedItem="{Binding SelectedConnectionType}"/>
+                        </Border>
+
+                        <TextBlock Grid.Column="3" Grid.Row="4" Grid.RowSpan="2"
+                                   Text="Opóźnienie&#10;źródła [s]"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <TextBox Grid.Column="4" Grid.Row="4"
+                                 Text="{Binding SelectedSourceDelay}"
+                                 materialDesign:HintAssist.HelperText="Liczba całkowita"
+                                 VerticalAlignment="Center" Margin="5 10 5 5"/>
+                        <ComboBox Grid.Column="4" Grid.Row="5"
+                                  ItemsSource="{Binding UnitList}"
+                                  SelectedItem="{Binding SelectedSourceDelayUnit}"
+                                  materialDesign:HintAssist.HelperText="Jednostka prądu"
+                                  Margin="5 10 5 5"/>
+
+                        <!-- Wybór pliku zapisu -->
+                        <Border  Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="5"
+                                 BorderBrush="Gainsboro" BorderThickness="1" Margin="2 10" >
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right"
+                                        Command="{Binding SelectSaveFileCommand}"
+                                        ToolTip="Wybierz plik zapisu"
+                                        Content="{materialDesign:PackIcon Kind=FileOutline}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Right" Margin="5, 5" Cursor="Hand"/>
+                                <TextBlock DockPanel.Dock="Left"
+                                           Text="Plik zapisu pomiarów:"
+                                           Margin="5, 5" VerticalAlignment="Center"
+                                           TextAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding SelectedOutputFileInfo}"
+                                           Foreground="{Binding SelectedOutputFileInfoBrush}"
+                                           ToolTip="{Binding SelectedOutputFile}"
+                                           Margin="5, 5" VerticalAlignment="Center"
+                                           TextAlignment="Left"/>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{materialDesign:PackIcon Kind=SnowflakeThermometer}"
+                     ToolTip="Parametry sterownika temperatury">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalAlignment="Top">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Border  Grid.Column="2" Grid.Row="0" Grid.RowSpan="8"
+                                 BorderBrush="DarkGray" BorderThickness="1"
+                                 Margin="5, 10"/>
+                        <!-- &#10; - kod nowej lini '\n' -->
+
+                        <TextBlock Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                                   Text="Typ sterowania"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <Border  Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                                 BorderBrush="Gainsboro" BorderThickness="1"
+                                 VerticalAlignment="Center" Margin="2" >
+                            <ListBox ItemsSource="{Binding ControlTypeList}"
+                                     SelectedItem="{Binding SelectedControlType}"/>
+                        </Border>
+
+                        <TextBlock Grid.Column="3" Grid.Row="0" Grid.RowSpan="3"
+                                   Text="Jednostka temperatury"
+                                   Margin="5, 5" VerticalAlignment="Center"
+                                   TextAlignment="Center" FontWeight="Bold"/>
+                        <Border  Grid.Column="4" Grid.Row="0" Grid.RowSpan="3"
+                                 BorderBrush="Gainsboro" BorderThickness="1"
+                                 VerticalAlignment="Center" Margin="2" >
+                            <ListBox ItemsSource="{Binding TemperatureUnitList}"
+                                     SelectedItem="{Binding SelectedTemperatureUnit}"/>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Ustawienia auto PID -->
+            <TabItem Header="{materialDesign:PackIcon Kind=CameraControl}"
+                     ToolTip="Auto PID">
+                <labpid:AutoPidMenuControl x:Name="PidMenu"
+                                           IsAutoPid="{Binding IsAutoPid, Mode=TwoWay}"
+                                           IsEnabled="{Binding IsEditInterfaceEnabled}"/>
+            </TabItem>
+
+            <!-- Przewidywany przebieg programu -->
+            <TabItem Header="{materialDesign:PackIcon Kind=ChartLine}"
+                     ToolTip="Przewidywany przebieg">
+                <lab2d:MultiSeriesPlot MultiSeriesPlotModel="{Binding PlotModel}"/>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</UserControl>

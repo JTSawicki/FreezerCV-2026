@@ -1,0 +1,37 @@
+﻿<SyntaxDefinition name="PiecykScript" 
+                  xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+<Color name="Comment" foreground="DarkGreen" />
+
+  <!-- This is the main ruleset. -->
+  <RuleSet>
+    <Span color="Comment" begin="#" />
+
+    <!-- Kolorowanie funkcji -->
+    <Keywords fontWeight="bold" foreground="Blue">
+      <Word>func.end</Word>
+      <Word>func.repeat</Word>
+      <Word>func.wait</Word>
+      <Word>func.longWait</Word>
+      <Word>lake.changeTemperature</Word>
+      <Word>lake.setPid</Word>
+      <Word>lake.setTemperature</Word>
+      <Word>lake.waitUntilTemperature</Word>
+      <Word>lake.waitUntilTargetTemperature</Word>
+      <Word>keithley.sweep</Word>
+    </Keywords>
+    
+    <!-- Kolorowanie funkcji -->
+    <Keywords fontWeight="bold" foreground="Red">
+      <Word>func</Word>
+      <Word>lake</Word>
+      <Word>keithley</Word>
+    </Keywords>
+
+    <!-- Kolorowanie liczb -->
+    <Rule foreground="DarkViolet">
+      (    \d+(\.[0-9]+)?   #number with optional floating point
+      |    \.[0-9]+         #or just starting with floating point
+      )
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>

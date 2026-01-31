@@ -1,0 +1,203 @@
+﻿<UserControl x:Class="FreezerGUI.Views.FlowSensorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FreezerGUI.Views"
+             mc:Ignorable="d" 
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:conv="clr-namespace:FreezerGUI.DataConverters"
+             d:DesignHeight="450" d:DesignWidth="800"
+             FontSize="14">
+    <UserControl.Resources>
+        <conv:BooleanBrushConverter x:Key="BooleanBrushConverter"/>
+    </UserControl.Resources>
+    <DockPanel>
+        <!-- Panel stanu -->
+        <Border DockPanel.Dock="Top"
+                BorderBrush="Gainsboro" BorderThickness="1" Margin="2" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <!-- Widok przepływu -->
+                <TextBlock Grid.Column="0" Grid.Row="0"
+                           Text="Odczyt przepływu"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"
+                           Text="{Binding RealFlowCurrentInfo}"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+
+                <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="4"
+                        BorderBrush="DarkGray" BorderThickness="1"
+                        Margin="5, 10"/>
+                <!-- Widok celu przepływu -->
+                <TextBlock Grid.Column="2" Grid.Row="0"
+                           Text="Nastawa przepływu"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"
+                           Text="{Binding RealFlowTargetInfo}"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+
+                <Border Grid.Column="3" Grid.Row="0" Grid.RowSpan="4"
+                        BorderBrush="DarkGray" BorderThickness="1"
+                        Margin="5, 10"/>
+                <!-- Widok działania systemu -->
+                <Grid Grid.Column="4" Grid.Row="0" Grid.RowSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon Grid.Column="0" Grid.Row="0"
+                                             Kind="CheckboxIntermediate"
+                                             Foreground="{Binding SensorArmed, Converter={StaticResource BooleanBrushConverter}}"
+                                             Margin="5" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Grid.Row="0"
+                               Text="Stan uzbrojenia czujnika"
+                               Margin="5, 5"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"
+                               TextAlignment="Center" FontWeight="Black"/>
+                    <Button Grid.Column="2" Grid.Row="0"
+                            Content="Uzbrój czujnik" Command="{Binding ArmSensorCommand}"
+                            Margin="5 5"/>
+
+                    <materialDesign:PackIcon Grid.Column="0" Grid.Row="1"
+                                             Kind="CheckboxIntermediate"
+                                             Foreground="{Binding SensorAlarmTrigerd, Converter={StaticResource BooleanBrushConverter}}"
+                                             Margin="5" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1"
+                               Text="Stan załączenia alarmu czujnika"
+                               Margin="5, 5"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"
+                               TextAlignment="Center" FontWeight="Black"/>
+                    <Button Grid.Column="2" Grid.Row="1"
+                            Content="Rozbrój czujnik" Command="{Binding DisarmSensorCommand}"
+                            Margin="5 5"/>
+
+                    <materialDesign:PackIcon Grid.Column="0" Grid.Row="2"
+                                             Kind="CheckboxIntermediate"
+                                             Foreground="{Binding SensorConnectedToWiFi, Converter={StaticResource BooleanBrushConverter}}"
+                                             Margin="5" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2"
+                               Text="Stan połączenia z WiFi czujnika"
+                               Margin="5, 5"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"
+                               TextAlignment="Center" FontWeight="Black"/>
+                    <Button Grid.Column="2" Grid.Row="2"
+                            Content="Połącz ponownie do WiFi" Command="{Binding ReconnectWiFiSensorCommand}"
+                            Margin="5 5"/>
+                </Grid>
+            </Grid>
+        </Border>
+        
+        <!-- Panel wprowadzania ustawień -->
+        <Border DockPanel.Dock="Top"
+                BorderBrush="Gainsboro" BorderThickness="1" Margin="2" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <!-- Cel przepływu -->
+                <TextBlock Grid.Column="0" Grid.Row="0"
+                           Text="Nastawa przepływu"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBox Grid.Column="0" Grid.Row="1"
+                         Text="{Binding SelectedFlowTarget}"
+                         materialDesign:HintAssist.Hint ="Nastawa przepływu"
+                         materialDesign:HintAssist.HelperText="Format 00.00"
+                         VerticalAlignment="Center" Margin="5 10 5 5"/>
+                <Button Grid.Column="0" Grid.Row="3"
+                        Content="Zapisz" Command="{Binding SendTargetFlowCommand}"
+                        Margin="5 5"/>
+
+
+                <Border  Grid.Column="1" Grid.Row="0" Grid.RowSpan="4"
+                         BorderBrush="DarkGray" BorderThickness="1"
+                         Margin="5, 10"/>
+                <!-- Ustawienia WiFi -->
+                <TextBlock Grid.Column="2" Grid.Row="0"
+                           Text="Ustawienia WiFi"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBox Grid.Column="2" Grid.Row="1"
+                         Text="{Binding SelectedWiFiName}"
+                         materialDesign:HintAssist.Hint ="Login"
+                         VerticalAlignment="Center" Margin="5 10 5 5"/>
+                <TextBox Grid.Column="2" Grid.Row="2"
+                         Text="{Binding SelectedWiFiPassword}"
+                         materialDesign:HintAssist.Hint ="Hasło"
+                         VerticalAlignment="Center" Margin="5 10 5 5"/>
+                <Button Grid.Column="2" Grid.Row="3"
+                        Content="Zapisz" Command="{Binding SendWiFiSettingsCommand}"
+                        Margin="5 5"/>
+
+                
+                <Border  Grid.Column="3" Grid.Row="0" Grid.RowSpan="4"
+                         BorderBrush="DarkGray" BorderThickness="1"
+                         Margin="5, 10"/>
+                <!-- Ustawienia serwera pocztowego -->
+                <TextBlock Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="2"
+                           Text="Ustawienia E-Mail"
+                           Margin="5, 5" VerticalAlignment="Center"
+                           TextAlignment="Center" FontWeight="Bold"/>
+                <TextBox Grid.Column="4" Grid.Row="1"
+                         Text="{Binding SelectedServer}"
+                         materialDesign:HintAssist.Hint ="Serwer E-Mail"
+                         VerticalAlignment="Center" Margin="5 10 5 5"/>
+                <TextBox Grid.Column="4" Grid.Row="2"
+                         Text="{Binding SelectedServerPort}"
+                         materialDesign:HintAssist.Hint ="Port serwera E-Mail"
+                         VerticalAlignment="Center" Margin="5 10 5 5"/>
+                <TextBox Grid.Column="5" Grid.Row="1"
+                         Text="{Binding SelectedEMailLogin}"
+                         materialDesign:HintAssist.Hint ="Login"
+                         VerticalAlignment="Center" Margin="5 10 5 5"/>
+                <TextBox Grid.Column="5" Grid.Row="2"
+                         Text="{Binding SelectedEMailPassword}"
+                         materialDesign:HintAssist.Hint ="Hasło"
+                         VerticalAlignment="Center" Margin="5 10 5 5"/>
+                <Button Grid.Column="4" Grid.Row="3"
+                        Content="Zapisz" Command="{Binding SendEMailSettingsCommand}"
+                        Margin="5 5"/>
+                <Button Grid.Column="5" Grid.Row="3"
+                        Content="Testowa wiadomość" Command="{Binding SendTestEMailCommand}"
+                        Margin="5 5"/>
+            </Grid>
+        </Border>
+        
+        <!-- Wypełniacz -->
+        <Border/>
+    </DockPanel>
+</UserControl>
