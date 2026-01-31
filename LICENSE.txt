@@ -1,0 +1,6 @@
+Copyright (C) Jan Sawicki - All Rights Reserved
+Software published for inspection only.
+Unauthorized use or distribution, via any medium is strictly prohibited.
+Proprietary and confidential.
+This software is provided as it is and author takes no responsibility for program state or operation. 
+Written by Jan Sawicki, January 2026
